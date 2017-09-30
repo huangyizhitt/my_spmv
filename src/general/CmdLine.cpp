@@ -15,7 +15,7 @@ CmdLine::CmdLine(int argc, char **argv) : keys(10), values(10)
 
 		string::size_type pos;
 		string key, val;
-		if ((pos = arg.find('=')) == string::nops)
+		if ((pos = arg.find('=')) == string::npos)
 		{
 			key = string(arg, 2, arg.length() - 2);
 			val = "";
@@ -26,8 +26,8 @@ CmdLine::CmdLine(int argc, char **argv) : keys(10), values(10)
 			val = string(arg, pos + 1, arg.length() - 1);
 		}
 
-		key.push_back(key);
-		values.push_back(values);
+		keys.push_back(key);
+		values.push_back(val);
 	}
 }
 

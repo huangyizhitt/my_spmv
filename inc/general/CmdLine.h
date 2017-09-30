@@ -1,10 +1,11 @@
-#ifndef _ARGS_H_
-#define _ARGS_H_
+#ifndef _CMDLINE_H_
+#define _CMDLINE_H_
 
 #include <map>
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cuda_runtime.hgi>
 
 struct CmdLine {
 	float				device_giga_bandwidth;
@@ -38,3 +39,5 @@ struct CmdLine {
 
 	cudaError_t DeviceInit(const int& dev = -1);
 };
+
+#endif

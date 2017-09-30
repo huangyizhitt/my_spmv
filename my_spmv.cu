@@ -1,3 +1,4 @@
+#include "CmdLine.h"
 #include <stdio.h>
 #include <cuda_runtime.h>
 
@@ -5,7 +6,7 @@
 int main(int argc, char **argv)
 {
 	CmdLine cmd(argc, argv);
-	if (args.CheckCmdLineFlag("help"))
+	if (cmd.CheckCmdLineFlag("help"))
 	{
 		printf(
 			"%s "
