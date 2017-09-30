@@ -4,13 +4,12 @@ SOURCES := my_spmv.cu
 
 ROOT_DIR = $(shell pwd)
 
-SRCDIRS := $(ROOT_DIR)/src
-
-SUBDIRS := $(SRCDIRS)
-
-SRCDIRS += $(shell find $(SRCDIRS) -maxdepth 1 -type d)
+SUBDIRS := $(shell find . -maxdepth 1 -type d)
 
 INCDIR = $(ROOT_DIR)/inc
+
+SUBDIRS := $(basename $(patsubst ./%,%,$(SUBDIRS)))
+SUBDIRS := $(filter-out inc,$(SUBDIRS))
 
 INCLUDES := -I$(INCDIR)
 INCLUDES += -I$(INCDIR)/general
