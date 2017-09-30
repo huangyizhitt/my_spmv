@@ -12,9 +12,12 @@ INCLUDES := -I$(INCDIRS)/general
 CUDAINC := /usr/local/cuda-8.0/include
 INCLUDES += -I$(CUDAINC)
 
+OBJDIR := $(ROOT)/../../obj
+
 all: $(OBJECTS)
 $(OBJECTS): %.o: %.cpp
 	$(CXX) -o $@ -c $^ $(INCLUDES) $(CXXFLAGS)
+	cp $@ $(OBJDIR)/$@ 
 
 .PHONY: clean
 clean:
