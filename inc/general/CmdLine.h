@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <cuda_runtime.hgi>
+#include <cuda_runtime.h>
 
 struct CmdLine {
 	float				device_giga_bandwidth;
