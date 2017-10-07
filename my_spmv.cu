@@ -31,4 +31,25 @@ int main(int argc, char **argv)
             "\n", argv[0]);
 		exit(0);
 	}
+	
+	bool fp32;
+	std::string	matrix_filename;
+	int                 grid2d              = -1;
+    int                 grid3d              = -1;
+    int                 wheel               = -1;
+    int                 dense               = -1;
+    int                 timing_iterations   = -1;
+    float               alpha               = 1.0;
+    float               beta                = 0.0;
+	
+	cmd.GetCmdLineArgument("i", timing_iterations);
+    cmd.GetCmdLineArgument("mtx", matrix_filename);
+    cmd.GetCmdLineArgument("grid2d", grid2d);
+    cmd.GetCmdLineArgument("grid3d", grid3d);
+    cmd.GetCmdLineArgument("wheel", wheel);
+    cmd.GetCmdLineArgument("dense", dense);
+    cmd.GetCmdLineArgument("alpha", alpha);
+    cmd.GetCmdLineArgument("beta", beta);
+	
+	cmd.DeviceInit();
 }

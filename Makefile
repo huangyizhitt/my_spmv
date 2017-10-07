@@ -27,6 +27,7 @@ OBJS += $(OBJDIR)/*.o
 CXX := g++
 
 CXXFLAGS = -g -std=c++11 -O3 -Wall -m64 -Wextra
+export CXXFLAGS
 
 NVCC = $(shell which nvcc)
 
@@ -62,6 +63,7 @@ ifeq ($(verbose), 1)
 endif
 
 NVCCFLAGS = -std=c++11 -O3 -arch=$(SM) -Xcompiler -Wall -Xcompiler -Wextra -m64
+export NVCCFLAGS
 
 $(EXECUTABLE): my_spmv.o subdirs
 	$(NVCC) -o $@ $< $(OBJS) $(INCLUDES) $(NVCCFLAGS)

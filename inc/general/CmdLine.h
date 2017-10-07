@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <iostream>
 #include <cuda_runtime.h>
@@ -37,7 +38,20 @@ struct CmdLine {
 		return static_cast<int>(keys.size());
 	}
 
-	cudaError_t DeviceInit(const int& dev = -1);
+	void DeviceInit(int dev = -1);
 };
+
+template <typename T>
+void CmdLine::GetCmdLineArgument(const char *arg_name, T& val) const
+{
+	for(int i = 0; i < static_cast<int>(keys.size()); i++)
+	{
+		if(keys[i] == std::string(arg_name))
+		{
+			std::istringstream str_stream(values[i]);
+			str_stream >> val;
+		}
+	}
+}
 
 #endif
