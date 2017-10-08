@@ -15,6 +15,7 @@ SUBDIRS := $(filter-out $(EXCPDIRS),$(SUBDIRS))
 
 INCLUDES := -I$(INCDIR)
 INCLUDES += -I$(INCDIR)/general
+INCLUDES += -I$(INCDIR)/matrix
 
 CUDAINC = /usr/local/cuda-8.0/include
 
