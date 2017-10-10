@@ -1,6 +1,7 @@
 CXX := g++
 NVCC := $(shell which nvcc)
 RM := rm -rf
+CP := cp
 
 ROOT := $(shell pwd)
 SOURCES := $(wildcard *.cpp)
@@ -18,13 +19,10 @@ OBJDIR := $(ROOT)/../../obj
 
 all: $(OBJECTS) $(CUOBJECTS)
 $(OBJECTS): %.o: %.cpp
-	$(CXX) -o $@ -c $^ $(INCLUDES) $(CXXFLAGS)
-	cp $@ $(OBJDIR)/$@ 
+	$(CXX) -o $(OBJDIR)/$@ -c $^ $(INCLUDES) $(CXXFLAGS)
 
 $(CUOBJECTS): %.o: %.cu
-	$(NVCC) -o $@ -c $^ $(INCLUDES) $(NVCCFLAGS)
-	echo $(NVCCFLAGS)
-	cp $@ $(OBJDIR)/$@
+	$(NVCC) -o $(OBJDIR)/$@ -c $^ $(INCLUDES) $(NVCCFLAGS)
 
 .PHONY: clean
 clean:

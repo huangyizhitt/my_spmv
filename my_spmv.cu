@@ -1,6 +1,8 @@
 #include "CmdLine.h"
 #include "utils.cuh"
 #include "CooMatrix.hpp"
+#include "CsrMatrix.hpp"
+#include "test.hpp"
 #include <cstdio>
 #include <cuda_runtime.h>
 #include <iostream>
@@ -29,8 +31,80 @@ void SaveMatrix(const CooMatrix<ValueT, OffsetT>& coo_matrix, const char *filena
 	out.close();
 }
 
+template<typename ValueT>
+void SaveOutput(const ValueT *output, const int& size, const char *filename)
+{
+	std::ofstream out(filename);
+	if(!out)
+	{
+		std::cout << "error: unable to open output file:"
+				  << filename << std::endl;
+		exit(1);
+	}
+	
+	for(int i = 0; i != size; i++)
+	{
+		out << output[i] << std::endl;
+	}
+	
+	out.close();
+}
+
+template <typename ValueT, typename OffsetT>
+void RunTest(ValueT aplpha, ValueT beta, CooMatrix<ValueT, OffsetT>& coo_matrix, 
+			 int timing_iterations, CmdLine& cmdline)
+{
+    // Adaptive timing iterations: run 16 billion nonzeros through
+    if (timing_iterations == -1)
+        timing_iterations = std::min(50000ull, std::max(100ull, ((16ull << 30) / coo_matrix.num_nonzeros)));
+	
+	if (!g_quiet)
+        printf("\t%d timing iterations\n", timing_iterations);
+	
+	CsrMatrix<ValueT, OffsetT> csr_matrix(coo_matrix);
+	if(!cmdline.CheckCmdLineFlag("csrmv"))
+	{
+		coo_matrix.Clear();
+	}
+	
+	csr_matrix.Stats().Display(!g_quiet);
+	
+	if(!g_quiet)
+	{
+		printf("\n");
+		csr_matrix.DisplayHistogram();
+		printf("\n");
+		if(g_verbose2)
+		{
+			csr_matrix.Display();
+		}
+		printf("\n");	
+	}
+	fflush(stdout);
+	
+	ValueT *vector_x = new ValueT[csr_matrix.num_cols];
+	ValueT *vector_y_in = new ValueT[csr_matrix.num_rows];
+	ValueT *vector_y_out = new ValueT[csr_matrix.num_rows];
+	
+	for (int col = 0; col < csr_matrix.num_cols; ++col)
+        vector_x[col] = 1.0;
+
+    for (int row = 0; row < csr_matrix.num_rows; ++row)
+        vector_y_in[row] = 1.0;
+	
+	SpmvVerification(csr_matrix, vector_x, vector_y_in, vector_y_out, aplpha, beta);
+	
+	//free memory
+	delete [] vector_x;
+	vector_x = nullptr;
+	delete [] vector_y_in;
+	vector_y_in = nullptr;
+	delete [] vector_y_out;
+	vector_y_out = nullptr;
+}
+
 template<typename ValueT, typename OffsetT>
-void RunTests(ValueT alpha, ValueT beta, const std::string& mtx_filename, int timing_iteration, CmdLine& cmdline)
+void RunTests(ValueT alpha, ValueT beta, const std::string& mtx_filename, int timing_iterations, CmdLine& cmdline)
 {
 	CooMatrix<ValueT, OffsetT> coo_matrix;
 	

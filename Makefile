@@ -34,6 +34,8 @@ NVCC = $(shell which nvcc)
 
 RM = rm -rf
 
+CP = cp
+
 MAKE = make
 
 CMD = ,
@@ -67,7 +69,7 @@ NVCCFLAGS = -std=c++11 -O3 -arch=$(SM) -Xcompiler -Wall -Xcompiler -Wextra -m64
 export NVCCFLAGS
 
 $(EXECUTABLE): my_spmv.o subdirs
-	$(NVCC) -o $@ $< $(OBJS) $(INCLUDES) $(NVCCFLAGS)
+	$(NVCC) -o $@ $(OBJS) $(INCLUDES) $(NVCCFLAGS)
 
 subdirs: $(SUBDIRS)
 	for dir in $^;\
@@ -75,7 +77,7 @@ subdirs: $(SUBDIRS)
 	done
 
 my_spmv.o: my_spmv.cu
-	$(NVCC) -o $@ -c $^ $(INCLUDES) $(NVCCFLAGS) 
+	$(NVCC) -o $(OBJDIR)/$@ -c $^ $(INCLUDES) $(NVCCFLAGS) 
 
 .PHONY: clean
 clean:
